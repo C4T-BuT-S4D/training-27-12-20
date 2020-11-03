@@ -1,0 +1,44 @@
+language: python
+
+python:
+  - "3.7"
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your first service>
+#  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your second service>
+  
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=20  SERVICE=all
+
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=200  SERVICE=<your first service>
+#  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=200  SERVICE=<your second service>
+
+services:
+  - docker
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
+  - pip install -r requirements.txt
+  - pip install -r checkers/requirements.txt
+  - ./check.py list
+  - ./check.py validate
+  - ./check.py up
+
+before_script:
+  - sleep 30
+
+script:
+  - ./check.py check
+
+after_script:
+  - ./check.py down
+
+after_failure:
+  - ./check.py logs
+

@@ -6,7 +6,7 @@ python:
 env:
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your first service>
 #  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your second service>
-  
+
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=20  SERVICE=all
 
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=200  SERVICE=<your first service>
@@ -20,6 +20,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
 install:
   - sudo apt-get update

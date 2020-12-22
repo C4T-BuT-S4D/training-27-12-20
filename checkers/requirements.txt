@@ -1,1 +1,4 @@
 checklib
+pwntools
+gevent
+textract

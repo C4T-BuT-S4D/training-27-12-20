@@ -6,7 +6,7 @@ python:
 env:
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=5  SERVICE=<your first service>
 #  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your second service>
-  
+
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=all
 
   - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=100  SERVICE=<your first service>
@@ -28,15 +28,14 @@ install:
   - pip install -r checkers/requirements.txt
   - ./check.py list
   - ./check.py validate
-  - ./check.py up
-
-before_script:
-  - sleep 30
 
 script:
+  - ./check.py up
+  - sleep 30
   - ./check.py check
   - ./check.py down
   - ./check.py up
+  - sleep 30
   - ./check.py check
 
 after_script:

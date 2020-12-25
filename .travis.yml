@@ -4,12 +4,12 @@ python:
   - "3.7"
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your first service>
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=5  SERVICE=<your first service>
 #  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=<your second service>
   
-  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=20  SERVICE=all
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=10  SERVICE=all
 
-  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=200  SERVICE=<your first service>
+  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=100  SERVICE=<your first service>
 #  - DOCKER_COMPOSE_VERSION=1.27.4 RUNS=200  SERVICE=<your second service>
 
 services:
@@ -34,6 +34,9 @@ before_script:
   - sleep 30
 
 script:
+  - ./check.py check
+  - ./check.py down
+  - ./check.py up
   - ./check.py check
 
 after_script:

@@ -29,15 +29,14 @@ install:
   - pip install -r checkers/requirements.txt
   - ./check.py list
   - ./check.py validate
-  - ./check.py up
-
-before_script:
-  - sleep 30
 
 script:
+  - ./check.py up
+  - sleep 30
   - ./check.py check
   - ./check.py down
   - ./check.py up
+  - sleep 30
   - ./check.py check
 
 after_script:

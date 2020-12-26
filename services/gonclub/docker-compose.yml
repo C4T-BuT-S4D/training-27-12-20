@@ -9,8 +9,9 @@ services:
     pids_limit: 256
     restart: on-failure
     volumes:
-      - "./data:/data"
-
+      - data:/data
+volumes:
+  data:
 
 
 

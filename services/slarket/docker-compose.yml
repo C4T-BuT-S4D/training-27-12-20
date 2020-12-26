@@ -1,0 +1,39 @@
+version: '2.4'
+
+services:
+  mongo:
+    image: mongo:3.6
+    restart: on-failure
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dungeon
+      MONGO_INITDB_ROOT_PASSWORD: master
+    ports:
+      - 27017:27017
+
+  slarket:
+    depends_on:
+      - mongo
+      - slaveql
+    restart: on-failure
+    build:
+      context: slarket
+    ports:
+      - 3001:3001
+    environment:
+      MONGO_ADDR: mongo
+      SLAVEQL_ADDR: slaveql
+    pids_limit: 256
+    mem_limit: 400M
+    cpus: 0.5
+
+  slaveql:
+    depends_on:
+      - mongo
+    restart: on-failure
+    build:
+      context: slaveql
+    environment:
+      MONGO_ADDR: mongo
+    pids_limit: 256
+    mem_limit: 400M
+    cpus: 0.5

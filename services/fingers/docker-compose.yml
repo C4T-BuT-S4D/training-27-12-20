@@ -1,0 +1,14 @@
+version: '2.4'
+
+services:
+  fingers:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    volumes:
+      - ./service/asss:/asss
+    ports:
+      - 9999:1337
+    restart: on-failure
+    pids_limit: 256
+    mem_limit: 500M

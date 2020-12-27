@@ -24,7 +24,7 @@ class Checker(BaseChecker):
     def remap(self, l, key='id'):
         d = {}
         for v in l:
-            d[v[key]] = v
+            d[v.get(key)] = v
         return d
 
     def check_response(self, r: requests.Response, public: str, status=checklib.status.Status.MUMBLE):
@@ -62,25 +62,25 @@ class Checker(BaseChecker):
         clubs = self.mch.list_latest_clubs(sess)
         club = self.remap(clubs, 'босс').get(u)
         self.assert_neq(club, None, 'Failed to find club in latest')
-        self.assert_eq(club['название'], club_name, 'Failed to find club in latest')
+        self.assert_eq(club.get('название'), club_name, 'Failed to find club in latest')
 
         nu, np, usess = self.mch.register_user(new_username)
-        self.mch.join_club(usess, club['ид'], club_password)
+        self.mch.join_club(usess, club.get('ид'), club_password)
 
         u_clubs = self.mch.list_user_clubs(usess)
-        club = self.remap(u_clubs, 'ид').get(club['ид'])
+        club = self.remap(u_clubs, 'ид').get(club.get('ид'))
         self.assert_neq(club, None, 'Failed to find user club')
-        self.assert_eq(club['босс'], u, 'Failed to find user club')
+        self.assert_eq(club.get('босс'), u, 'Failed to find user club')
 
         infos = [
-            self.mch.get_club_info(usess, club['ид']),
-            self.mch.get_club_info(sess, club['ид'])
+            self.mch.get_club_info(usess, club.get('ид')),
+            self.mch.get_club_info(sess, club.get('ид'))
         ]
         for info in infos:
-            self.assert_eq(info['босс'], u, 'Invalid club info returned')
-            self.assert_eq(info['название'], club_name, 'Invalid club info returned')
-            self.assert_in(u, info['участники'], 'Invalid club info returned: failed to find user in participants')
-            self.assert_in(nu, info['участники'], 'Invalid club info returned: failed to find user in participants')
+            self.assert_eq(info.get('босс'), u, 'Invalid club info returned')
+            self.assert_eq(info.get('название'), club_name, 'Invalid club info returned')
+            self.assert_in(u, info.get('участники', []), 'Invalid club info returned: failed to find user in participants')
+            self.assert_in(nu, info.get('участники', []), 'Invalid club info returned: failed to find user in participants')
 
         self.cquit(Status.OK)
 
@@ -104,7 +104,7 @@ class Checker(BaseChecker):
         club_id = club_resp.get('ид', '')
         self.assert_neq(club_id, '', 'Could not create club')
         _, _, csess = self.mch.register_user(cu, cp)
-        self.mch.join_club(csess, club_resp['ид'], club_password)
+        self.mch.join_club(csess, club_resp.get('ид'), club_password)
         full_info = {
             'u': u,
             'p': p,
@@ -119,13 +119,13 @@ class Checker(BaseChecker):
         u, p, cu, cp, club_id = data['u'], data['p'], data['cu'], data['cp'], data['cid']
         sess = self.mch.login_user(u, p)
         info = self.mch.get_club_info(sess, club_id)
-        self.assert_in(cu, info['участники'], 'Invalid club info returned: failed to find user in participants',
+        self.assert_in(cu, info.get('участники', []), 'Invalid club info returned: failed to find user in participants',
                        status=Status.CORRUPT)
         client_sess = self.mch.login_user(cu, cp)
         info = self.mch.get_club_info(client_sess, club_id)
-        self.assert_in(u, info['участники'], 'Invalid club info returned: failed to find user in participants',
+        self.assert_in(u, info.get('участники', []), 'Invalid club info returned: failed to find user in participants',
                        status=Status.CORRUPT)
-        self.assert_in(cu, info['участники'], 'Invalid club info returned: failed to find user in participants',
+        self.assert_in(cu, info.get('участники', []), 'Invalid club info returned: failed to find user in participants',
                        status=Status.CORRUPT)
         self.cquit(Status.OK)
 

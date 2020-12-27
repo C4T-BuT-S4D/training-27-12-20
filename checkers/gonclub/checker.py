@@ -15,6 +15,7 @@ from gonclub_lib import *
 class Checker(BaseChecker):
     uses_attack_data = True
     timeout = 20
+    vulns = 2
 
     def __init__(self, *args, **kwargs):
         super(Checker, self).__init__(*args, **kwargs)

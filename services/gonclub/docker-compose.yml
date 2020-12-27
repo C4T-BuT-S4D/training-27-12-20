@@ -2,14 +2,21 @@ version: '2.4'
 services:
   gonclub:
     build: .
-    ports:
-      - "9990:9990"
     cpus: 2
     mem_limit: 2048m
     pids_limit: 256
     restart: on-failure
     volumes:
       - data:/data
+
+  nginx:
+    image: nginx:1.15.11-alpine
+    ports:
+      - "9990:80"
+    restart: on-failure
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+
 volumes:
   data:
 

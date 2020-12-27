@@ -41,4 +41,4 @@ services:
     restart: on-failure
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d:ro
-      - ./nginx/public:/dist
+      - ./nginx/public:/dist:ro

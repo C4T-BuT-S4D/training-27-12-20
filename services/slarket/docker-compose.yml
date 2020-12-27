@@ -15,8 +15,6 @@ services:
     restart: on-failure
     build:
       context: slarket
-    ports:
-      - 3001:3001
     environment:
       MONGO_ADDR: mongo
       SLAVEQL_ADDR: slaveql
@@ -35,3 +33,12 @@ services:
     pids_limit: 256
     mem_limit: 400M
     cpus: 0.5
+
+  nginx:
+    image: nginx:1.15.11-alpine
+    ports:
+      - 3001:80
+    restart: on-failure
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+      - ./nginx/public:/dist

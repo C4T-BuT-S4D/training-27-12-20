@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     r = remote(sys.argv[1], 9999)
 
-    ass_name = argv[2]
+    ass_name = sys.argv[2]
     r.recvuntil(b"> ")
     r.sendline(b"3")
 
